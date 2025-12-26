@@ -26,9 +26,9 @@ The RISC-V contains the four essential blocks,
 #### ‣ [Data Memory](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Data%20Memory)
 This four blocks are the key componenets of the processor. But, to bluid the whole architecture it is not enough, you need the connecting components for the above which plays a greater role in selecting the data, to ensure data is being read or written to. We need,
 #### ‣ Multiplexers - 3 are required
-- [**Multiplexer for PC](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Multiplexer%20for%20PCSrc)
-- [**Multiplexer for ALU](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Multiplexer%20for%20ALUSrc)
-- [**Multiplexer for Result](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/blob/main/RISC-V%20Main%20Modules%20Designs/Multiplexer%20for%20ResultSrc/Design.v)
+- [**Multiplexer for PC**](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Multiplexer%20for%20PCSrc)
+- [**Multiplexer for ALU**](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Multiplexer%20for%20ALUSrc)
+- [**Multiplexer for Result**](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/blob/main/RISC-V%20Main%20Modules%20Designs/Multiplexer%20for%20ResultSrc/Design.v)
 
 The count is 3, for selecting their desired selection line which are PCSrc, ALUSrc, ResultSrc.
 #### ‣ Adders - 2 are required
