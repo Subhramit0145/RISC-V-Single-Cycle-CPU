@@ -16,15 +16,6 @@ This repository will picture out the main idea on various main block of RISC-V a
 
 ![image](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/assets/152515939/a96949c0-6e89-426c-97c5-8d158f3afae8)
 
-## Instruction Set
-
-![image](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/assets/152515939/e5042813-b772-4bf1-a8a8-44d33539c6b8)
-
-## ALU Table
-
-![image](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/assets/152515939/9b26d4e0-50c2-43be-aef5-47effa00f8ff)
-
-
 
 
 ## what are the main blocks in this Single cycle processor?
@@ -35,14 +26,14 @@ The RISC-V contains the four essential blocks,
 #### ‣ [Data Memory](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Data%20Memory)
 This four blocks are the key componenets of the processor. But, to bluid the whole architecture it is not enough, you need the connecting components for the above which plays a greater role in selecting the data, to ensure data is being read or written to. We need,
 #### ‣ Multiplexers - 3 are required
-- [**Multiplexer for PCSrc**](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Multiplexer%20for%20PCSrc)
-- [**Multiplexer for ALUSrc**](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Multiplexer%20for%20ALUSrc)
-- [**Multiplexer for ResultSrc**](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/blob/main/RISC-V%20Main%20Modules%20Designs/Multiplexer%20for%20ResultSrc/Design.v)
+- [**Multiplexer for PC](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Multiplexer%20for%20PCSrc)
+- [**Multiplexer for ALU](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Multiplexer%20for%20ALUSrc)
+- [**Multiplexer for Result](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/blob/main/RISC-V%20Main%20Modules%20Designs/Multiplexer%20for%20ResultSrc/Design.v)
 
 The count is 3, for selecting their desired selection line which are PCSrc, ALUSrc, ResultSrc.
 #### ‣ Adders - 2 are required
-- [**Adder for PCPlus4**](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Adder%20for%20PCPlus4)
-- [**Adder for PCTarget**](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Adder%20for%20PCTarget)
+- [**Adder for PC Plus4**](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Adder%20for%20PCPlus4)
+- [**Adder for PC Target**](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Adder%20for%20PCTarget)
   
 The adder will increment the value. For PCPlus4 the previous input is added with four as an output to give the next input for program counter. And, for PCTarget the addition is between the ImmExt (output of Extend File) and PC input.
 #### ‣ [Arithmetic logic unit](https://github.com/EkthaReddy/RISC-V-Single-Cycle-Processor/tree/main/RISC-V%20Main%20Modules%20Designs/Arithmetic%20Logic%20Unit)
@@ -65,24 +56,35 @@ All this combined together with the appropriate logic flow will give the archite
 
 ## What datapath does the load word, store word, and Branch equal word follow
 
-### Load Word
-Step 1: The type of instruction used will determine the path for data to flow. To explain in simpler ways, the data will follow a path from the program counter at an initial address let's take 1000. It will give the instruction in machine code language after being fed into the instruction Memory.
+### Load Word (LW) — Datapath Flow
 
+Instruction Fetch
+The Program Counter (PC) outputs the current instruction address (e.g., 1000).
+This address is used to read the corresponding machine instruction from Instruction Memory.
 
-Step 2: The opcode and instruction used will excute path in a certain direction. To know which path to choose, the multiplexer is been placed.
+Instruction Decode & Control Selection
+The opcode inside the instruction determines the type of operation.
+Based on the opcode, the control unit generates signals that select the correct datapath using multiplexers.
 
+Register Read & Immediate Extension
+The source register field is used to read data from the Register File, producing SrcA.
+The instruction’s immediate field is passed through the Extend (Immediate Generator) to produce a 32-bit immediate value, which forms SrcB when selected by the multiplexer.
 
-Step 3:The sourse register from instruction set is fed into the register file at source operand A1(for single source register) which now gives us SrcA. For SrcB, add the extend file which will convert the small bits to 32 bit wide.
+If the instruction requires two source registers, both A1 and A2 fields are used.
 
-Note: If two single source register are used then both A1 and A2 source operand are used.
+ALU Execution
+SrcA and SrcB are passed into the ALU, where the effective memory address is calculated.
+The ALU operation is determined by the Main Decoder and ALU Decoder, controlled by the ALU Control Unit.
 
+Memory Read & Write-Back
+The ALU result is used as the address input to Data Memory.
+The value stored at this address is read and written back to the Register File through WD3 when RegWrite is enabled.
 
-Step 4: The SrcA and SrcB will be computed in ALU Logice where it comprise of Main Decoder and ALU Decoder which are controlled by ALU Controller.
+PC Update
+To move to the next instruction, an adder increments the current PC by 4, producing PCPlus4, which becomes the next value of the Program Counter.
 
-
-Step 5: The ALUResult is fed into the Data memory and where the Result is added back to the Register File of WD3. RegWrite is added as a control signal to ALU Controller.
-Now, we need the next instruction to pass on, the adder is used which gives output as PCPlus4 which addes the previous input with four.
-
+In summary:
+PC → Instruction → Decode & Register Read → ALU Address Calculation → Memory Read → Register Write-Back → PC+4
 
 ### Store word
 Step 1: The whole structure of store word is almost same like the load word. 
